@@ -11,8 +11,8 @@ export async function up(knex: Knex): Promise<void> {
       .notNullable()
       .references("questionId")
       .inTable("questions");
-    table.timestamp("createAt").defaultTo(knex.fn.now());
-    table.timestamp("updateAt").nullable();
+    table.timestamp("createdAt").defaultTo(knex.fn.now());
+    table.timestamp("updatedAt").nullable();
   });
 }
 

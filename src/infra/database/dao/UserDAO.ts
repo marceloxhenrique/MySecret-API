@@ -1,16 +1,28 @@
-import UserEntity from "@domain/entity/UserEntity";
+import {
+  KnexTypeAdapter,
+  DatabaseTablesNames,
+} from "@infra/database/KnexAdapater";
+import { UserModel } from "@domain/model";
 import DAO from "@domain/dao/DAO";
 
-export default class UerDao implements DAO<UserEntity> {
-  create(data: UserEntity): Promise<UserEntity> {
-    return new Promise((resolve, reject) => {
-      resolve(data);
-    });
+export default class UerDao implements DAO<UserModel> {
+  private readonly tableName: string = DatabaseTablesNames.USER;
+
+  constructor(private readonly connection: KnexTypeAdapter) {}
+
+  async create(data: UserModel): Promise<UserModel> {
+    const [savedUser] = await this.connection<UserModel>(this.tableName)
+      .insert(data)
+      .returning("*");
+    return savedUser;
   }
 
-  findById(id: number): Promise<UserEntity> {
-    return new Promise((resolve, reject) => {
-      resolve(new UserEntity());
-    });
+  async findById(userId: string): Promise<UserModel | null> {
+    const data = await this.connection<UserModel>(this.tableName)
+      .where({ userId })
+      .first();
+
+    if (!data) return null;
+    return data;
   }
 }

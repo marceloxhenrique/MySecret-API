@@ -1,11 +1,12 @@
 import UUIDGenerator from "./UUIDGenerator";
+
 export default class QuestionEntity {
   constructor(
     readonly questionId: string,
     readonly userId: string,
     readonly question: string,
     readonly createdAt: Date,
-    readonly updateAt: Date | null
+    readonly updatedAt: Date | null
   ) {}
 
   static create(userId: string, question: string): QuestionEntity {

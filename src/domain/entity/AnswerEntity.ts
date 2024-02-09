@@ -7,7 +7,7 @@ export default class AnswerEntity {
     readonly userId: string | null,
     readonly answer: string,
     readonly createdAt: Date,
-    readonly updateAt: Date | null
+    readonly updatedAt: Date | null
   ) {}
 
   static create(
@@ -17,6 +17,7 @@ export default class AnswerEntity {
   ): AnswerEntity {
     const answerId = UUIDGenerator.generate();
     const createdAt = new Date();
+
     return new AnswerEntity(
       answerId,
       questionId,

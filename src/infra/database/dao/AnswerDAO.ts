@@ -1,12 +1,12 @@
 import {
   KnexTypeAdapter,
-  DatabaseTablesNames,
-} from "@infra/database/KnexAdapater";
+  DatabaseTableNames,
+} from "@infra/database/KnexAdapter";
 import { AnswerModel } from "@domain/model";
 import DAO from "@domain/dao/DAO";
 
 export default class AnswerDAO implements DAO<AnswerModel> {
-  private readonly tableName: string = DatabaseTablesNames.ANSWERS;
+  private readonly tableName: string = DatabaseTableNames.ANSWERS;
 
   constructor(private readonly connection: KnexTypeAdapter) {}
 
@@ -14,6 +14,7 @@ export default class AnswerDAO implements DAO<AnswerModel> {
     const [savedAnswer] = await this.connection<AnswerModel>(this.tableName)
       .insert(data)
       .returning("*");
+
     return savedAnswer;
   }
 
@@ -21,8 +22,13 @@ export default class AnswerDAO implements DAO<AnswerModel> {
     const data = await this.connection<AnswerModel>(this.tableName)
       .where({ answerId })
       .first();
-
     if (!data) return null;
     return data;
+  }
+
+  async list(questionId: string): Promise<AnswerModel[]> {
+    return await this.connection<AnswerModel>(this.tableName).where({
+      questionId,
+    });
   }
 }
